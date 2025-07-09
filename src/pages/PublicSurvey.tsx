@@ -2,6 +2,12 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CheckCircle, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 interface Question {
   id: string;
@@ -71,20 +77,20 @@ const PublicSurvey: React.FC = () => {
     switch (question.type) {
       case 'text':
         return (
-          <input
+          <Input
             type="text"
-            className="professional-input"
             placeholder="Your answer..."
             value={responses[question.id] || ''}
             onChange={(e) => handleInputChange(question.id, e.target.value)}
             required={question.required}
+            className="w-full"
           />
         );
 
       case 'textarea':
         return (
           <textarea
-            className="professional-input h-24 resize-none"
+            className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none"
             placeholder="Your answer..."
             value={responses[question.id] || ''}
             onChange={(e) => handleInputChange(question.id, e.target.value)}
@@ -96,20 +102,21 @@ const PublicSurvey: React.FC = () => {
         return (
           <div className="space-y-3">
             {question.options?.map((option, index) => (
-              <label key={index} className="flex items-center cursor-pointer group">
+              <div key={index} className="flex items-center space-x-2">
                 <input
                   type="radio"
+                  id={`${question.id}-${index}`}
                   name={`question-${question.id}`}
                   value={option}
                   checked={responses[question.id] === option}
                   onChange={(e) => handleInputChange(question.id, e.target.value)}
-                  className="mr-3"
+                  className="h-4 w-4 text-primary focus:ring-primary border-border"
                   required={question.required}
                 />
-                <span className="group-hover:opacity-80 transition-opacity" style={{ color: 'var(--text-primary)' }}>
+                <Label htmlFor={`${question.id}-${index}`} className="text-sm font-normal cursor-pointer">
                   {option}
-                </span>
-              </label>
+                </Label>
+              </div>
             ))}
           </div>
         );
@@ -118,25 +125,23 @@ const PublicSurvey: React.FC = () => {
         return (
           <div className="space-y-3">
             {question.options?.map((option, index) => (
-              <label key={index} className="flex items-center cursor-pointer group">
-                <input
-                  type="checkbox"
-                  value={option}
+              <div key={index} className="flex items-center space-x-2">
+                <Checkbox
+                  id={`${question.id}-${index}`}
                   checked={(responses[question.id] || []).includes(option)}
-                  onChange={(e) => {
+                  onCheckedChange={(checked) => {
                     const currentValues = responses[question.id] || [];
-                    if (e.target.checked) {
+                    if (checked) {
                       handleInputChange(question.id, [...currentValues, option]);
                     } else {
                       handleInputChange(question.id, currentValues.filter((v: string) => v !== option));
                     }
                   }}
-                  className="mr-3"
                 />
-                <span className="group-hover:opacity-80 transition-opacity" style={{ color: 'var(--text-primary)' }}>
+                <Label htmlFor={`${question.id}-${index}`} className="text-sm font-normal cursor-pointer">
                   {option}
-                </span>
-              </label>
+                </Label>
+              </div>
             ))}
           </div>
         );
@@ -145,23 +150,16 @@ const PublicSurvey: React.FC = () => {
         return (
           <div className="flex flex-wrap gap-2">
             {Array.from({ length: 11 }, (_, i) => i).map((rating) => (
-              <button
+              <Button
                 key={rating}
                 type="button"
+                variant={responses[question.id] === rating ? "default" : "outline"}
+                size="sm"
                 onClick={() => handleInputChange(question.id, rating)}
-                className={`w-12 h-12 border rounded-lg font-semibold transition-all ${
-                  responses[question.id] === rating
-                    ? 'border-blue-500 bg-blue-500 text-white'
-                    : 'border-gray-300 hover:border-blue-300 hover:bg-blue-50'
-                }`}
-                style={{
-                  borderColor: responses[question.id] === rating ? 'var(--primary-blue)' : 'var(--border-color)',
-                  background: responses[question.id] === rating ? 'var(--primary-blue)' : 'transparent',
-                  color: responses[question.id] === rating ? 'white' : 'var(--text-primary)'
-                }}
+                className="w-12 h-12 p-0"
               >
                 {rating}
-              </button>
+              </Button>
             ))}
           </div>
         );
@@ -173,85 +171,80 @@ const PublicSurvey: React.FC = () => {
 
   if (submitted) {
     return (
-      <div style={{ background: 'var(--bg-primary)', minHeight: '100vh' }}>
-        <div className="min-h-screen flex items-center justify-center px-4">
-          <div className="text-center max-w-md mx-auto">
-            <div className="mb-8">
-              <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" 
-                   style={{ background: 'var(--gradient-primary)' }}>
-                <CheckCircle size={40} className="text-white" />
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
+        <Card className="w-full max-w-md">
+          <CardContent className="pt-6">
+            <div className="text-center">
+              <div className="w-20 h-20 rounded-full bg-primary flex items-center justify-center mx-auto mb-6">
+                <CheckCircle size={40} className="text-primary-foreground" />
               </div>
-              <h1 className="text-3xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>
-                Thank You!
-              </h1>
-              <p className="text-lg mb-6" style={{ color: 'var(--text-secondary)' }}>
+              <CardTitle className="text-3xl mb-4">Thank You!</CardTitle>
+              <CardDescription className="text-lg mb-6">
                 Your responses have been successfully submitted. We appreciate your feedback!
-              </p>
-              <div className="professional-card p-6">
-                <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>
+              </CardDescription>
+              <div className="space-y-2 p-4 bg-muted rounded-lg">
+                <p className="text-sm text-muted-foreground">
                   Survey ID: {surveyId}
                 </p>
-                <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>
+                <p className="text-sm text-muted-foreground">
                   Submitted: {new Date().toLocaleDateString()}
                 </p>
               </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
 
   return (
-    <div style={{ background: 'var(--bg-primary)', minHeight: '100vh', padding: '40px 0' }}>
+    <div className="min-h-screen bg-background py-8">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Survey Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             {survey.title}
           </h1>
-          <p className="text-lg" style={{ color: 'var(--text-secondary)' }}>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             {survey.description}
           </p>
         </div>
 
         {/* Survey Form */}
-        <form onSubmit={handleSubmit}>
-          <div className="professional-card p-8 mb-8">
-            <div className="space-y-8">
-              {survey.questions.map((question, index) => (
-                <div key={question.id} className="pb-8 border-b last:border-b-0" style={{ borderColor: 'var(--border-color)' }}>
-                  <div className="mb-4">
-                    <span className="text-sm font-medium px-3 py-1 rounded-full" 
-                          style={{ background: 'var(--bg-secondary)', color: 'var(--text-muted)' }}>
-                      Question {index + 1} of {survey.questions.length}
-                    </span>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <Card>
+            <CardContent className="p-8">
+              <div className="space-y-8">
+                {survey.questions.map((question, index) => (
+                  <div key={question.id} className="pb-8 border-b border-border last:border-b-0">
+                    <div className="mb-4">
+                      <Badge variant="secondary" className="mb-4">
+                        Question {index + 1} of {survey.questions.length}
+                      </Badge>
+                    </div>
+                    <Label className="text-lg font-semibold mb-4 block">
+                      {question.question}
+                      {question.required && <span className="text-destructive ml-1">*</span>}
+                    </Label>
+                    {renderQuestion(question)}
                   </div>
-                  <label className="block text-lg font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>
-                    {question.question}
-                    {question.required && <span style={{ color: '#dc2626' }} className="ml-1">*</span>}
-                  </label>
-                  {renderQuestion(question)}
-                </div>
-              ))}
-            </div>
-          </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Submit Button */}
           <div className="text-center">
-            <button
-              type="submit"
-              className="professional-button-primary text-lg px-12 py-4 flex items-center space-x-3 mx-auto"
-            >
+            <Button type="submit" size="lg" className="px-12 py-4">
               <span>Submit Survey</span>
-              <ArrowRight size={20} />
-            </button>
+              <ArrowRight size={20} className="ml-2" />
+            </Button>
           </div>
         </form>
 
         {/* Footer */}
-        <div className="text-center mt-12 pt-8 border-t" style={{ borderColor: 'var(--border-color)' }}>
-          <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>
+        <div className="text-center mt-12 pt-8 border-t border-border">
+          <p className="text-sm text-muted-foreground">
             Powered by SurveyPro - Professional Survey Builder
           </p>
         </div>
