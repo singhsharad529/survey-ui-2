@@ -148,7 +148,7 @@ const Dashboard: React.FC = () => {
                   Your Surveys
                 </h2>
               </div>
-              <div className="divide-y" style={{ divideColor: 'var(--border-color)' }}>
+              <div className="divide-y divide-border">
                 {surveys.map((survey) => (
                   <div key={survey.id} className="p-6 hover:bg-opacity-50 transition-colors" style={{ background: 'transparent' }}>
                     <div className="flex items-center justify-between">
