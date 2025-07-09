@@ -14,16 +14,21 @@ const Header: React.FC = () => {
     <header style={{ 
       background: 'var(--bg-primary)', 
       borderBottom: '1px solid var(--border-color)',
-      boxShadow: 'var(--shadow-light)'
-    }}>
+      boxShadow: 'var(--shadow-light)',
+      position:"sticky",
+      top:0,
+      zIndex:1000,
+    }}
+    
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <BarChart3 style={{ color: 'var(--primary-blue)' }} size={32} />
             <span style={{ 
               color: 'var(--text-primary)', 
-              fontSize: '24px', 
+              fontSize: '28px', 
               fontWeight: '700' 
             }}>
               SurveyPro
@@ -39,6 +44,7 @@ const Header: React.FC = () => {
                 fontWeight: isActive('/') ? '600' : '500'
               }}
               className="hover:opacity-80 transition-opacity"
+              
             >
               Home
             </Link>
