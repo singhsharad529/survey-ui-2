@@ -41,7 +41,7 @@ const Header: React.FC = () => {
 
           {/* Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            <nav className="space-x-8">
+            <nav className="space-x-6">
               <Link
                 to="/"
                 style={{

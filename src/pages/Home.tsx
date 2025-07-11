@@ -20,7 +20,7 @@ const Home: React.FC = () => {
       {/* Hero Section */}
       <section className="hero-gradient relative overflow-hidden py-20 lg:py-0">
         <div className="max-w-7xl mx-auto px-1 sm:px-6 lg:px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center text-center lg:text-left justify-items-center">
+          <div className="lg:ml-4 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center text-center lg:text-left justify-items-center">
             <div className="fade-in-up">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
                 Create AI-Generated
@@ -53,9 +53,16 @@ const Home: React.FC = () => {
             </div>
 
             {/* Hero Illustration */}
-            <div className="hidden lg:block relative w-full">
-              <div className="professional-card p-8 bg-white/95 backdrop-blur-sm">
-                <div className="space-y-12">
+            <div className="hidden lg:flex items-center relative w-full h-[320px]">
+              {/* Background Peek Card 2 */}
+              <div className="absolute top-8 left-8 xl:top-16 xl:left-16 w-full max-w-md h-full bg-gray-100 rounded-lg z-0 shadow-md"></div>
+
+              {/* Background Peek Card 1 */}
+              <div className="absolute top-5 left-5 xl:top-8 xl:left-8 w-full max-w-md h-full bg-gray-200 rounded-lg z-10 shadow-md"></div>
+
+              {/* Foreground Professional Card */}
+              <div className="relative z-20 w-full max-w-md h-full bg-white/95 backdrop-blur-sm rounded-lg shadow-lg p-8">
+                <div className="space-y-8">
                   <div className="flex items-center space-x-3">
                     <div
                       className="w-4 h-4 rounded-full"
@@ -75,18 +82,24 @@ const Home: React.FC = () => {
                     <div className="h-3 bg-gray-200 rounded w-1/2"></div>
                     <div className="grid grid-cols-2 gap-2">
                       <div className="h-8 bg-blue-100 rounded flex items-center justify-center">
-                        <CheckCircle
-                          size={16}
-                          style={{ color: "var(--primary-blue)" }}
-                        />
+                        <CheckCircle size={16} style={{ color: "var(--primary-blue)" }} />
                       </div>
                       <div className="h-8 bg-gray-100 rounded"></div>
                     </div>
                     <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                    <div className="h-3 bg-gray-200 rounded w-2/4"></div>
+                    <div className="h-3 bg-gray-200 rounded w-3/4"></div>
+                    <div className="h-8 bg-blue-100 rounded flex items-center justify-center">
+                      <CheckCircle size={16} style={{ color: "var(--primary-blue)" }} />
+                    </div>
+
+
                   </div>
                 </div>
               </div>
             </div>
+
+
           </div>
         </div>
       </section>
