@@ -2,11 +2,15 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Moon, Sun, BarChart3, Plus, Settings, X, Menu } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
+import AuthModal from "./authDialog/AuthModal";
+import GlobalLoader from "./Loaders/GlobalLoader";
 
 const Header: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+
+  const [showAuthModal, setShowAuthModal] = useState(false); // Add this
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -85,12 +89,13 @@ const Header: React.FC = () => {
               </a> */}
             </nav>
 
-            <Link to="/create">
-              <button className="professional-button-primary flex items-center space-x-2">
-                <Plus size={16} />
-                <span>Create Survey</span>
-              </button>
-            </Link>
+            <button
+              onClick={() => setShowAuthModal(true)}
+              className="professional-button-primary flex items-center space-x-2"
+            >
+              <Plus size={16} />
+              <span>Create Survey</span>
+            </button>
             <button
               onClick={toggleTheme}
               className="professional-button-secondary p-2"
@@ -180,6 +185,12 @@ const Header: React.FC = () => {
           </aside>
         </div>
       </div>
+
+      {showAuthModal && (
+        <AuthModal onClose={() => setShowAuthModal(false)} />
+      )}
+
+      {/* <GlobalLoader state={false} /> */}
     </header>
   );
 };
