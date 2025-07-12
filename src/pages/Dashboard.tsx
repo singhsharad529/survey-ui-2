@@ -67,10 +67,10 @@ const Dashboard: React.FC = () => {
   return (
     <div style={{ background: 'var(--bg-primary)', minHeight: '100vh' }}>
       <Header />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>
               Dashboard
@@ -79,16 +79,18 @@ const Dashboard: React.FC = () => {
               Manage your surveys and track responses
             </p>
           </div>
-          <Link to="/create">
-            <button className="professional-button-primary flex items-center space-x-2">
-              <Plus size={16} />
-              <span>Create New Survey</span>
-            </button>
-          </Link>
+          <div className='flex justify-end'>
+            <Link to="/create">
+              <button className="professional-button-primary flex items-center text-sm md:text-md space-x-2 px-3 md:py-3 md:px-6">
+                <Plus size={16} />
+                <span>Create New Survey</span>
+              </button>
+            </Link>
+          </div>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 mb-8">
           <div className="professional-card p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -151,16 +153,18 @@ const Dashboard: React.FC = () => {
               <div className="divide-y divide-border">
                 {surveys.map((survey) => (
                   <div key={survey.id} className="p-6 hover:bg-opacity-50 transition-colors" style={{ background: 'transparent' }}>
-                    <div className="flex items-center justify-between">
+                    <div className="flex-col md:flex-row flex gap-4 justify-between">
                       <div className="flex-1">
-                        <div className="flex items-center space-x-3">
+                        <div className="flex flex-col-reverse gap-2 sm:flex-row space-x-3">
                           <h3 className="font-semibold" style={{ color: 'var(--text-primary)' }}>
                             {survey.title}
                           </h3>
-                          <span className={`status-badge status-${survey.status} flex items-center space-x-1`}>
-                            {getStatusIcon(survey.status)}
-                            <span>{survey.status}</span>
-                          </span>
+                          <div className="flex justify-end">
+                            <span className={`status-badge status-${survey.status} flex space-x-1`}>
+                              {getStatusIcon(survey.status)}
+                              <span>{survey.status}</span>
+                            </span>
+                          </div>
                         </div>
                         <div className="flex items-center space-x-4 mt-2">
                           <span style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>
@@ -208,7 +212,7 @@ const Dashboard: React.FC = () => {
               <h3 className="font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>
                 Quick Actions
               </h3>
-              <div className="space-y-3">
+              <div className="flex flex-col space-y-3">
                 <Link to="/create">
                   <button className="professional-button-primary w-full flex items-center justify-center space-x-2">
                     <Plus size={16} />
