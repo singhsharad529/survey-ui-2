@@ -76,8 +76,16 @@ export default function EditQuestionModal({
                             Dropdown
                         </div>
                     )}
-
                     {tempQuestion.type === "textarea" && (
+                        <div
+                            className="professional-input"
+                            style={{ background: "var(--bg-secondary)" }}
+                        >
+                            Text Area
+                        </div>
+                    )}
+
+                    {tempQuestion.type === "text" && (
                         <div
                             className="professional-input"
                             style={{ background: "var(--bg-secondary)" }}

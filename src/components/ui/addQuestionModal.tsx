@@ -22,6 +22,7 @@ export default function AddQuestionModal({ onClose, onSave }) {
         if (!title.trim()) return;
         const question = { question: title, type, options: ['radio', 'checkbox', "dropdown"].includes(type) ? options : [] };
         onSave(question);
+        onClose()
     };
 
     return (
@@ -52,7 +53,9 @@ export default function AddQuestionModal({ onClose, onSave }) {
                     <option value="checkbox">Multiple Choice (Checkbox)</option>
                     <option value="dropdown">Dropdown</option>
 
+                    <option value="textarea">Text Area</option>
                     <option value="text">Text Input</option>
+
                 </select>
 
                 <div className='max-h-52 overflow-y-auto mb-3'>

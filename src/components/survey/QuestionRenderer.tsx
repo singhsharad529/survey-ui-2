@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,24 +23,26 @@ const QuestionRenderer: React.FC<QuestionRendererProps> = ({ question, value, on
     switch (question.type) {
       case 'text':
         return (
-          <Input
+          <input
             type="text"
+            className="professional-input"
             placeholder="Your answer..."
             value={value || ''}
             onChange={(e) => onChange(e.target.value)}
             required={question.required}
-            className="w-full"
+            aria-label={question.question}
           />
         );
 
       case 'textarea':
         return (
           <textarea
-            className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none"
+            className="professional-input resize-none min-h-[120px]"
             placeholder="Your answer..."
             value={value || ''}
             onChange={(e) => onChange(e.target.value)}
             required={question.required}
+            aria-label={question.question}
           />
         );
 
@@ -49,7 +50,7 @@ const QuestionRenderer: React.FC<QuestionRendererProps> = ({ question, value, on
         return (
           <div className="space-y-3">
             {question.options?.map((option, index) => (
-              <div key={index} className="flex items-center space-x-2">
+              <div key={index} className="flex items-center space-x-3">
                 <input
                   type="radio"
                   id={`${question.id}-${index}`}
@@ -57,10 +58,10 @@ const QuestionRenderer: React.FC<QuestionRendererProps> = ({ question, value, on
                   value={option}
                   checked={value === option}
                   onChange={(e) => onChange(e.target.value)}
-                  className="h-4 w-4 text-primary focus:ring-primary border-border"
                   required={question.required}
+                  className="h-4 w-4 text-[var(--primary-blue)] bg-[var(--bg-primary)] border-[var(--border-color)] rounded"
                 />
-                <Label htmlFor={`${question.id}-${index}`} className="text-sm font-normal cursor-pointer">
+                <Label htmlFor={`${question.id}-${index}`} className="text-[var(--text-primary)] cursor-pointer">
                   {option}
                 </Label>
               </div>
@@ -72,20 +73,18 @@ const QuestionRenderer: React.FC<QuestionRendererProps> = ({ question, value, on
         return (
           <div className="space-y-3">
             {question.options?.map((option, index) => (
-              <div key={index} className="flex items-center space-x-2">
+              <div key={index} className="flex items-center space-x-3">
                 <Checkbox
                   id={`${question.id}-${index}`}
                   checked={(value || []).includes(option)}
                   onCheckedChange={(checked) => {
-                    const currentValues = value || [];
-                    if (checked) {
-                      onChange([...currentValues, option]);
-                    } else {
-                      onChange(currentValues.filter((v: string) => v !== option));
-                    }
+                    const current = value || [];
+                    onChange(
+                      checked ? [...current, option] : current.filter((v: string) => v !== option)
+                    );
                   }}
                 />
-                <Label htmlFor={`${question.id}-${index}`} className="text-sm font-normal cursor-pointer">
+                <Label htmlFor={`${question.id}-${index}`} className="text-[var(--text-primary)] cursor-pointer">
                   {option}
                 </Label>
               </div>
@@ -95,18 +94,20 @@ const QuestionRenderer: React.FC<QuestionRendererProps> = ({ question, value, on
 
       case 'rating':
         return (
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mt-1">
             {Array.from({ length: 11 }, (_, i) => i).map((rating) => (
-              <Button
+              <button
                 key={rating}
                 type="button"
-                variant={value === rating ? "default" : "outline"}
-                size="sm"
+                className={`w-10 h-10 rounded-full border transition duration-200 font-semibold text-sm ${value === rating
+                  ? 'bg-[var(--primary-blue)] text-white shadow-md'
+                  : 'bg-[var(--bg-tertiary)] text-[var(--text-primary)] border-[var(--border-color)] hover:bg-[var(--bg-primary)]'
+                  }`}
                 onClick={() => onChange(rating)}
-                className="w-12 h-12 p-0"
+                aria-label={`Rating ${rating}`}
               >
                 {rating}
-              </Button>
+              </button>
             ))}
           </div>
         );
@@ -116,7 +117,7 @@ const QuestionRenderer: React.FC<QuestionRendererProps> = ({ question, value, on
     }
   };
 
-  return renderQuestion();
+  return <div className="mt-2">{renderQuestion()}</div>;
 };
 
 export default QuestionRenderer;

@@ -1,10 +1,9 @@
-
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent } from '@/components/ui/card';
+import { CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import SurveyHeader from '@/components/survey/SurveyHeader';
 import SuccessScreen from '@/components/survey/SuccessScreen';
@@ -79,25 +78,26 @@ const PublicSurvey: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background py-8">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[var(--bg-secondary)] py-12 px-4 fade-in-up">
+      <div className="max-w-3xl mx-auto">
+        {/* Header */}
         <SurveyHeader title={survey.title} description={survey.description} />
 
         {/* Survey Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <Card>
+        <form onSubmit={handleSubmit} className="mt-6 space-y-6">
+          <div className="professional-card">
             <CardContent className="p-8">
-              <div className="space-y-8">
+              <div className="space-y-10">
                 {survey.questions.map((question, index) => (
-                  <div key={question.id} className="pb-8 border-b border-border last:border-b-0">
-                    <div className="mb-4">
-                      <Badge variant="secondary" className="mb-4">
-                        Question {index + 1} of {survey.questions.length}
-                      </Badge>
-                    </div>
-                    <Label className="text-lg font-semibold mb-4 block">
+                  <div key={question.id} className="pb-8 border-b border-[var(--border-color)] last:border-b-0">
+                    <Badge variant="secondary" className="mb-3 text-sm tracking-wide">
+                      Question {index + 1} of {survey.questions.length}
+                    </Badge>
+                    <Label className="text-[var(--text-primary)] text-md lg:text-lg font-semibold block mb-2">
                       {question.question}
-                      {question.required && <span className="text-destructive ml-1">*</span>}
+                      {question.required && (
+                        <span className="text-destructive ml-1 font-bold">*</span>
+                      )}
                     </Label>
                     <QuestionRenderer
                       question={question}
@@ -108,21 +108,21 @@ const PublicSurvey: React.FC = () => {
                 ))}
               </div>
             </CardContent>
-          </Card>
+          </div>
 
           {/* Submit Button */}
-          <div className="text-center">
-            <Button type="submit" size="lg" className="px-12 py-4">
+          <div className="text-center pt-4">
+            <button type="submit" className="professional-button-primary text-md px-8 py-4 flex items-center justify-center space-x-3 mx-auto">
               <span>Submit Survey</span>
-              <ArrowRight size={20} className="ml-2" />
-            </Button>
+              <ArrowRight size={20} />
+            </button>
           </div>
         </form>
 
         {/* Footer */}
-        <div className="text-center mt-12 pt-8 border-t border-border">
-          <p className="text-sm text-muted-foreground">
-            Powered by SurveyPro - Professional Survey Builder
+        <div className="text-center mt-12 pt-8 border-t border-[var(--border-color)]">
+          <p className="text-sm text-[var(--text-muted)]">
+            Powered by <strong>SurveyPro</strong> — Professional Survey Builder
           </p>
         </div>
       </div>

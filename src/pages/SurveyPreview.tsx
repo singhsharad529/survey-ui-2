@@ -167,6 +167,12 @@ const SurveyPreview: React.FC = () => {
       required: false,
     },
     {
+      id: "10",
+      type: "text",
+      question: "What improvements would you like to see in our product?",
+      required: false,
+    },
+    {
       id: "3",
       type: "textarea",
       question: "What improvements would you like to see in our product?",
@@ -267,6 +273,15 @@ const SurveyPreview: React.FC = () => {
           <textarea
             className="professional-input mt-2"
             placeholder="User answer"
+            rows={4}
+          />
+        )}
+
+        {question.type === "text" && (
+          <input
+            className="professional-input mt-2"
+            placeholder="User answer"
+            type="text"
           />
         )}
 
