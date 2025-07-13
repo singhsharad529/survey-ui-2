@@ -12,6 +12,8 @@ import {
   GripVerticalIcon,
   ChevronUp,
   ChevronDown,
+  Pencil,
+  Save,
 } from "lucide-react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -33,10 +35,20 @@ interface Question {
   required: boolean;
 }
 
-function SortableItem({ question, index, renderQuestion, onDelete, onMoveUp, onMoveDown, isFirst, isLast }) {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
-    id: question.id,
-  });
+function SortableItem({
+  question,
+  index,
+  renderQuestion,
+  onDelete,
+  onMoveUp,
+  onMoveDown,
+  isFirst,
+  isLast,
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({
+      id: question.id,
+    });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -49,12 +61,19 @@ function SortableItem({ question, index, renderQuestion, onDelete, onMoveUp, onM
       ref={setNodeRef}
       {...attributes}
       style={style}
-      className="group relative mb-4 p-4 border border-transparent rounded-lg hover:border-gray-300 transition-colors"
+      className="group relative mb-4 p-4 border border-transparent rounded-lg border-gray-300 transition-colors"
     >
       {/* Desktop Drag + Delete */}
-      <div className="absolute right-0 top-0 flex items-center space-x-2 opacity-0 group-hover:opacity-100 -mr-10 mt-2 md:flex hidden">
-        <button {...listeners} className="p-1 mr-3 hover:bg-gray-100 rounded cursor-grab">
-          <GripVerticalIcon size={16} style={{ color: "var(--text-muted)" }} />
+      <div className="absolute right-0 top-0 -mr-6 flex items-center space-x-1 mt-2 md:flex hidden">
+
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(question.id);
+          }}
+          className="p-1 hover:bg-gray-100 rounded"
+        >
+          <Pencil size={16} style={{ color: "var(--primary-blue)" }} />
         </button>
         <button
           onClick={(e) => {
@@ -65,6 +84,12 @@ function SortableItem({ question, index, renderQuestion, onDelete, onMoveUp, onM
         >
           <Trash2 size={16} style={{ color: "#dc2626" }} />
         </button>
+        <button
+          {...listeners}
+          className="p-1 hover:bg-gray-100 rounded cursor-grab"
+        >
+          <GripVerticalIcon size={16} style={{ color: "var(--text-muted)" }} />
+        </button>
       </div>
 
       {/* Mobile Controls */}
@@ -72,7 +97,7 @@ function SortableItem({ question, index, renderQuestion, onDelete, onMoveUp, onM
         {!isFirst && (
           <button
             onClick={() => onMoveUp(index)}
-            className="text-sm px-2 py-1 bg-[var(--bg-tertiary)] rounded hover:bg-[var(--bg-secondary)]"
+            className="text-sm px-1 py-1 bg-[var(--bg-tertiary)] rounded hover:bg-[var(--bg-secondary)]"
           >
             <ChevronUp size={16} />
           </button>
@@ -80,18 +105,25 @@ function SortableItem({ question, index, renderQuestion, onDelete, onMoveUp, onM
         {!isLast && (
           <button
             onClick={() => onMoveDown(index)}
-            className="text-sm px-2 py-1 bg-[var(--bg-tertiary)] rounded hover:bg-[var(--bg-secondary)]"
+            className="text-sm px-1 py-1 bg-[var(--bg-tertiary)] rounded hover:bg-[var(--bg-secondary)]"
           >
             <ChevronDown size={16} />
-
           </button>
         )}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(question.id);
+          }}
+          className="p-1 rounded"
+        >
+          <Pencil size={16} style={{ color: "var(--primary-blue)" }} />
+        </button>
         <button
           onClick={() => onDelete(question.id)}
           className="text-sm px-1 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200"
         >
           <Trash2 size={16} style={{ color: "#dc2626" }} />
-
         </button>
       </div>
 
@@ -99,7 +131,6 @@ function SortableItem({ question, index, renderQuestion, onDelete, onMoveUp, onM
     </div>
   );
 }
-
 
 const SurveyPreview: React.FC = () => {
   const navigate = useNavigate();
@@ -113,7 +144,7 @@ const SurveyPreview: React.FC = () => {
     {
       id: "1",
       type: "radio",
-      question: "How satisfied are you with our product overall?",
+      question: "How satisfied are you with our product overall? Give your valuable feedback to us to imporove our product",
       options: [
         "Very Satisfied",
         "Satisfied",
@@ -137,12 +168,12 @@ const SurveyPreview: React.FC = () => {
       question: "What improvements would you like to see in our product?",
       required: false,
     },
-    {
-      id: "4",
-      type: "rating",
-      question: "How likely are you to recommend our product to others?",
-      required: true,
-    },
+    // {
+    //   id: "4",
+    //   type: "rating",
+    //   question: "How likely are you to recommend our product to others?",
+    //   required: true,
+    // },
     {
       id: "5",
       type: "dropdown",
@@ -316,13 +347,25 @@ const SurveyPreview: React.FC = () => {
                 </SortableContext>
               </DndContext>
 
-              <button
-                onClick={() => setShowModal(true)}
-                className="professional-button-secondary mt-4 w-full flex justify-center items-center py-3 space-x-2 border-dashed border-2"
-              >
-                <Plus size={16} />
-                <span>Add Question</span>
-              </button>
+              <div className="flex flex-row gap-2 mt-4">
+                <button
+                  onClick={() => setShowModal(true)}
+                  className="professional-button-secondary w-full flex justify-center items-center py-3 space-x-2 border-dashed border-2"
+                >
+                  <Plus size={16} />
+                  <span>Add Question</span>
+                </button>
+                <div className="flex justify-end">
+                  <button
+                    className="professional-button-primary flex items-center text-sm md:text-md space-x-2 px-3 md:py-3 md:px-6"
+                    onClick={handlePublish}
+                  >
+                    <Save size={16} />
+                    <span>Save</span>
+                  </button>
+                </div>
+              </div>
+
             </div>
           </div>
 
