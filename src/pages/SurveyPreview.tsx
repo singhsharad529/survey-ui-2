@@ -10,6 +10,8 @@ import {
   Trash2,
   GripVertical,
   GripVerticalIcon,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -72,7 +74,7 @@ function SortableItem({ question, index, renderQuestion, onDelete, onMoveUp, onM
             onClick={() => onMoveUp(index)}
             className="text-sm px-2 py-1 bg-[var(--bg-tertiary)] rounded hover:bg-[var(--bg-secondary)]"
           >
-            ↑
+            <ChevronUp size={16} />
           </button>
         )}
         {!isLast && (
@@ -80,14 +82,16 @@ function SortableItem({ question, index, renderQuestion, onDelete, onMoveUp, onM
             onClick={() => onMoveDown(index)}
             className="text-sm px-2 py-1 bg-[var(--bg-tertiary)] rounded hover:bg-[var(--bg-secondary)]"
           >
-            ↓
+            <ChevronDown size={16} />
+
           </button>
         )}
         <button
           onClick={() => onDelete(question.id)}
-          className="text-sm px-2 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200"
+          className="text-sm px-1 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200"
         >
-          Delete
+          <Trash2 size={16} style={{ color: "#dc2626" }} />
+
         </button>
       </div>
 
