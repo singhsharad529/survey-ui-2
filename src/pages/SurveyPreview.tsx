@@ -26,6 +26,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import AddQuestionModal from "@/components/ui/addQuestionModal";
+import EditQuestionModal from "@/components/ui/editQuestionModal";
 
 interface Question {
   id: string;
@@ -44,6 +45,7 @@ function SortableItem({
   onMoveDown,
   isFirst,
   isLast,
+  setEditQuestion
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
@@ -61,15 +63,14 @@ function SortableItem({
       ref={setNodeRef}
       {...attributes}
       style={style}
-      className="group relative mb-4 p-4 border border-transparent rounded-lg border-gray-300 transition-colors"
+      className="group relative mb-4 p-4 border rounded-lg border-gray-300 transition-colors"
     >
       {/* Desktop Drag + Delete */}
       <div className="absolute right-0 top-0 -mr-6 flex items-center space-x-1 mt-2 md:flex hidden">
-
         <button
           onClick={(e) => {
             e.stopPropagation();
-            onDelete(question.id);
+            setEditQuestion(question)
           }}
           className="p-1 hover:bg-gray-100 rounded"
         >
@@ -113,7 +114,8 @@ function SortableItem({
         <button
           onClick={(e) => {
             e.stopPropagation();
-            onDelete(question.id);
+            setEditQuestion(question)
+
           }}
           className="p-1 rounded"
         >
@@ -138,13 +140,15 @@ const SurveyPreview: React.FC = () => {
   const surveyData = location.state?.surveyData;
 
   const [showModal, setShowModal] = useState(false);
+  const [editQuestion, setEditQuestion] = useState<Question | null>(null);
 
   // Mock generated questions based on input
   const [questions, setQuestions] = useState<Question[]>([
     {
       id: "1",
       type: "radio",
-      question: "How satisfied are you with our product overall? Give your valuable feedback to us to imporove our product",
+      question:
+        "How satisfied are you with our product overall? Give your valuable feedback to us to imporove our product",
       options: [
         "Very Satisfied",
         "Satisfied",
@@ -192,7 +196,7 @@ const SurveyPreview: React.FC = () => {
     allowMultipleSubmissions: false,
   });
 
-  const [editingQuestion, setEditingQuestion] = useState<string | null>(null);
+  // const [editingQuestion, setEditingQuestion] = useState<string | null>(null);
 
   const handlePublish = () => {
     console.log("Publishing survey...", { questions, surveySettings });
@@ -207,7 +211,18 @@ const SurveyPreview: React.FC = () => {
       required: false,
     };
     setQuestions([...questions, question]);
-    setEditingQuestion(newQuestion.id);
+    // setEditingQuestion(newQuestion.id);
+  };
+
+  const handleEditQuestion = (updatedQuestion) => {
+    console.log("edited question is", updatedQuestion);
+    let id = updatedQuestion.id
+
+    setQuestions((prev) =>
+      prev.map((q) => (q.id === id ? updatedQuestion : q))
+    );
+
+    setEditQuestion(null);
   };
 
   const handleDeleteQuestion = (id: string) => {
@@ -216,11 +231,11 @@ const SurveyPreview: React.FC = () => {
     setQuestions((prev) => prev.filter((q) => q.id !== id));
   };
 
-  const handleEditQuestion = (id: string, updates: Partial<Question>) => {
-    setQuestions(
-      questions.map((q) => (q.id === id ? { ...q, ...updates } : q))
-    );
-  };
+  // const handleEditQuestion = (id: string, updates: Partial<Question>) => {
+  //   setQuestions(
+  //     questions.map((q) => (q.id === id ? { ...q, ...updates } : q))
+  //   );
+  // };
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
@@ -332,6 +347,7 @@ const SurveyPreview: React.FC = () => {
                       isLast={idx === questions.length - 1}
                       renderQuestion={renderQuestion}
                       onDelete={handleDeleteQuestion}
+                      setEditQuestion={setEditQuestion}
                       onMoveUp={(i) => {
                         if (i > 0) {
                           setQuestions(arrayMove(questions, i, i - 1));
@@ -365,7 +381,6 @@ const SurveyPreview: React.FC = () => {
                   </button>
                 </div>
               </div>
-
             </div>
           </div>
 
@@ -512,6 +527,14 @@ const SurveyPreview: React.FC = () => {
         <AddQuestionModal
           onClose={() => setShowModal(false)}
           onSave={handleAddQuestion}
+        />
+      )}
+
+      {editQuestion && (
+        <EditQuestionModal
+          handleEditQuestion={handleEditQuestion}
+          question={editQuestion}
+          setEditQuestion={setEditQuestion}
         />
       )}
       <Footer />
