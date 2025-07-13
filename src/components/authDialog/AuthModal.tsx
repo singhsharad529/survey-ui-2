@@ -23,7 +23,7 @@ const AuthModal: React.FC<Props> = ({ onClose }) => {
         <div className="fixed inset-0 z-[9999] bg-black bg-opacity-40 flex items-center justify-center">
             <div
                 ref={modalRef}
-                className="bg-[var(--bg-primary)] p-6 rounded-2xl shadow-lg w-full max-w-md transform transition-all duration-500 scale-100  fade-in-up"
+                className="m-2 md:m-0 bg-[var(--bg-primary)] p-6 rounded-2xl shadow-lg w-full max-w-md transform transition-all duration-500 scale-100  fade-in-up"
             >
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-bold text-[var(--text-primary)]">

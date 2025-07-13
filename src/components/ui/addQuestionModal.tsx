@@ -7,6 +7,10 @@ export default function AddQuestionModal({ onClose, onSave }) {
     const [options, setOptions] = useState(['']);
 
     const handleAddOption = () => setOptions((prev) => [...prev, '']);
+    const handleRemoveOption = (index) => {
+        setOptions((prev) => prev.filter((_, i) => i !== index));
+    };
+
     const handleOptionChange = (i, value) => {
         const updated = [...options];
         updated[i] = value;
@@ -25,7 +29,7 @@ export default function AddQuestionModal({ onClose, onSave }) {
         <div className="fixed inset-0 z-[9999] bg-black bg-opacity-40 flex items-center justify-center">
             <div
                 // ref={modalRef}
-                className="bg-[var(--bg-primary)] p-6 rounded-2xl shadow-lg w-full max-w-md transform transition-all duration-500 scale-100  fade-in-up"
+                className="m-2 md:m-0 bg-[var(--bg-primary)] p-6 rounded-2xl shadow-lg w-full max-w-md transform transition-all duration-500 scale-100  fade-in-up"
             >
                 <h3 className="text-lg font-semibold mb-4 text-[var(--text-primary)]">Add New Question</h3>
 
@@ -51,16 +55,29 @@ export default function AddQuestionModal({ onClose, onSave }) {
                     <option value="text">Text Input</option>
                 </select>
 
-                {['radio', 'checkbox', 'dropdown'].includes(type) &&
-                    options.map((opt, i) => (
-                        <input
-                            key={i}
-                            className="professional-input mb-2"
-                            value={opt}
-                            onChange={(e) => handleOptionChange(i, e.target.value)}
-                            placeholder={`Option ${i + 1}`}
-                        />
-                    ))}
+                <div className='max-h-52 overflow-y-auto mb-3'>
+                    {['radio', 'checkbox', 'dropdown'].includes(type) &&
+                        options.map((opt, i) => (
+                            <div key={i} className="flex items-center mb-2 gap-2">
+                                <input
+                                    className="professional-input flex-1"
+                                    value={opt}
+                                    onChange={(e) => handleOptionChange(i, e.target.value)}
+                                    placeholder={`Option ${i + 1}`}
+                                />
+                                {options.length > 1 && (
+                                    <button
+                                        type="button"
+                                        onClick={() => handleRemoveOption(i)}
+                                        className="text-red-500 hover:text-red-600 text-sm px-2 py-1 rounded"
+                                    >
+                                        ✕
+                                    </button>
+                                )}
+                            </div>
+                        ))}
+                </div>
+
 
                 {['radio', 'checkbox', 'dropdown'].includes(type) && (
                     <button
